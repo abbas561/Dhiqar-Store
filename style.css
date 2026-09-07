@@ -1,0 +1,876 @@
+/* =====================================
+   أمازون ذي قار
+   Main Style CSS
+   Part 1
+===================================== */
+
+
+
+*{
+
+box-sizing:border-box;
+
+font-family:Tahoma, Arial, sans-serif;
+
+}
+
+
+
+body{
+
+margin:0;
+
+background:#f5f5f5;
+
+color:#222;
+
+}
+
+
+
+
+/* =========================
+   Header
+========================= */
+
+
+header{
+
+background:#111;
+
+color:white;
+
+padding:15px 5%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+gap:20px;
+
+flex-wrap:wrap;
+
+}
+
+
+
+.logo{
+
+font-size:26px;
+
+font-weight:bold;
+
+}
+
+
+
+
+.search{
+
+display:flex;
+
+position:relative;
+
+}
+
+
+
+.search input{
+
+width:300px;
+
+padding:12px;
+
+border:none;
+
+border-radius:10px 0 0 10px;
+
+font-size:16px;
+
+}
+
+
+
+.search button{
+
+padding:12px 18px;
+
+border:none;
+
+background:#f39c12;
+
+color:white;
+
+cursor:pointer;
+
+border-radius:0 10px 10px 0;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   Navigation
+========================= */
+
+
+nav{
+
+background:#222;
+
+display:flex;
+
+justify-content:center;
+
+gap:20px;
+
+padding:12px;
+
+flex-wrap:wrap;
+
+}
+
+
+
+nav a{
+
+color:white;
+
+text-decoration:none;
+
+padding:8px 15px;
+
+border-radius:8px;
+
+transition:.3s;
+
+}
+
+
+
+nav a:hover{
+
+background:#f39c12;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   Hero
+========================= */
+
+
+.hero{
+
+background:linear-gradient(
+135deg,
+#111,
+#444
+);
+
+color:white;
+
+text-align:center;
+
+padding:50px 20px;
+
+}
+
+
+
+.hero h1{
+
+font-size:40px;
+
+margin-bottom:15px;
+
+}
+
+
+
+.hero p{
+
+font-size:20px;
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+   Sections
+========================= */
+
+
+section{
+
+padding:30px 5%;
+
+}
+
+
+
+h2{
+
+text-align:center;
+
+margin-bottom:30px;
+
+}
+
+
+
+
+
+
+/* =========================
+   Categories
+========================= */
+
+
+.categories{
+
+display:grid;
+
+grid-template-columns:
+
+repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+}
+
+
+
+
+
+.category-box{
+
+background:white;
+
+padding:20px;
+
+border-radius:15px;
+
+text-align:center;
+
+box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+transition:.3s;
+
+}
+
+
+
+.category-box:hover{
+
+transform:translateY(-5px);
+
+}
+
+
+
+
+
+.category-box a{
+
+display:inline-block;
+
+margin-top:15px;
+
+background:#f39c12;
+
+color:white;
+
+padding:10px 20px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   Products
+========================= */
+
+
+.products{
+
+display:grid;
+
+grid-template-columns:
+
+repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+}
+
+
+
+
+.product-card{
+
+background:white;
+
+padding:15px;
+
+border-radius:15px;
+
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+text-align:center;
+
+transition:.3s;
+
+}
+
+
+
+.product-card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+}
+
+
+
+.product-card img{
+
+width:100%;
+
+height:220px;
+
+object-fit:cover;
+
+border-radius:12px;
+
+}
+
+
+
+.product-card h3{
+
+font-size:18px;
+
+}
+
+
+
+.product-card p{
+
+font-size:17px;
+
+font-weight:bold;
+
+}
+
+
+
+
+.product-card a{
+
+display:inline-block;
+
+background:#111;
+
+color:white;
+
+padding:10px 20px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+margin-top:10px;
+
+}
+
+
+
+.product-card a:hover{
+
+background:#f39c12;
+
+}
+/* =====================================
+   أمازون ذي قار
+   Main Style CSS
+   Part 2
+===================================== */
+
+
+
+/* =========================
+   Search Results
+========================= */
+
+
+#search-results{
+
+position:absolute;
+
+top:45px;
+
+right:0;
+
+background:white;
+
+width:300px;
+
+border-radius:12px;
+
+overflow:hidden;
+
+box-shadow:0 8px 25px rgba(0,0,0,.2);
+
+z-index:9999;
+
+}
+
+
+
+#search-results div{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+padding:10px;
+
+border-bottom:1px solid #eee;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+
+
+#search-results div:hover{
+
+background:#f5f5f5;
+
+}
+
+
+
+#search-results img{
+
+width:50px;
+
+height:50px;
+
+object-fit:cover;
+
+border-radius:8px;
+
+}
+
+
+
+
+
+/* =========================
+   Product Details Page
+========================= */
+
+
+.product-details{
+
+display:grid;
+
+grid-template-columns:
+
+repeat(auto-fit,minmax(300px,1fr));
+
+gap:30px;
+
+background:white;
+
+border-radius:20px;
+
+padding:30px;
+
+}
+
+
+
+.product-image img{
+
+width:100%;
+
+max-width:500px;
+
+border-radius:15px;
+
+}
+
+
+
+.gallery-small{
+
+display:flex;
+
+gap:10px;
+
+margin-top:15px;
+
+}
+
+
+
+.gallery-small img{
+
+width:80px;
+
+height:80px;
+
+object-fit:cover;
+
+cursor:pointer;
+
+border-radius:10px;
+
+}
+
+
+
+
+
+.product-info h1{
+
+font-size:32px;
+
+}
+
+
+
+.product-info h2{
+
+color:#f39c12;
+
+}
+
+
+
+.product-info p{
+
+font-size:18px;
+
+line-height:1.8;
+
+}
+
+
+
+
+
+.price-old{
+
+text-decoration:line-through;
+
+color:#888;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   Contact Buttons
+========================= */
+
+
+.float-contact{
+
+position:fixed;
+
+bottom:20px;
+
+right:20px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
+z-index:999;
+
+}
+
+
+
+.float-contact a{
+
+width:55px;
+
+height:55px;
+
+border-radius:50%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+color:white;
+
+font-size:25px;
+
+text-decoration:none;
+
+background:#111;
+
+}
+
+
+
+.float-contact a:hover{
+
+transform:scale(1.1);
+
+}
+
+
+
+
+
+
+/* =========================
+   Admin Page
+========================= */
+
+
+textarea{
+
+width:100%;
+
+min-height:120px;
+
+padding:12px;
+
+border-radius:10px;
+
+border:1px solid #ddd;
+
+}
+
+
+
+input,select{
+
+padding:12px;
+
+border-radius:10px;
+
+border:1px solid #ddd;
+
+width:100%;
+
+}
+
+
+
+
+button{
+
+cursor:pointer;
+
+background:#f39c12;
+
+color:white;
+
+border:none;
+
+padding:12px 25px;
+
+border-radius:10px;
+
+font-size:16px;
+
+}
+
+
+
+button:hover{
+
+background:#d98200;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   Footer
+========================= */
+
+
+footer{
+
+background:#111;
+
+color:white;
+
+text-align:center;
+
+padding:25px;
+
+margin-top:30px;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   Mobile Design
+========================= */
+
+
+@media(max-width:700px){
+
+
+
+header{
+
+flex-direction:column;
+
+}
+
+
+
+.logo{
+
+font-size:22px;
+
+}
+
+
+
+.search{
+
+width:100%;
+
+}
+
+
+
+.search input{
+
+width:100%;
+
+}
+
+
+
+
+nav{
+
+flex-direction:column;
+
+text-align:center;
+
+}
+
+
+
+.hero h1{
+
+font-size:28px;
+
+}
+
+
+
+.products{
+
+grid-template-columns:
+
+repeat(2,1fr);
+
+}
+
+
+
+.product-card img{
+
+height:150px;
+
+}
+
+
+
+.product-details{
+
+padding:15px;
+
+}
+
+
+
+
+#search-results{
+
+width:100%;
+
+}
+
+
+
+
+}
+
+
+
+@media(max-width:450px){
+
+
+.products{
+
+grid-template-columns:1fr;
+
+}
+
+
+
+}

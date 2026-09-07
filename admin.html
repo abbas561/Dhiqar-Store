@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+إدارة المنتجات - أمازون ذي قار
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+
+<style>
+
+.preview img{
+
+width:150px;
+
+height:150px;
+
+object-fit:cover;
+
+border-radius:15px;
+
+margin-top:10px;
+
+border:2px solid #ddd;
+
+}
+
+
+.file-box{
+
+background:#fff;
+
+padding:15px;
+
+border-radius:15px;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<div class="logo">
+🛒 إدارة أمازون ذي قار
+</div>
+
+</header>
+
+
+
+
+
+<section class="categories">
+
+
+<h2>
+➕ إضافة / تعديل منتج
+</h2>
+
+
+
+
+<div class="category-box">
+
+
+
+<input type="hidden" id="productId">
+
+
+
+
+
+<input id="name"
+placeholder="اسم المنتج">
+
+
+
+<br><br>
+
+
+
+
+
+<select id="category">
+
+
+<option>
+الإلكترونيات
+</option>
+
+
+<option>
+راوترات وشبكات
+</option>
+
+
+<option>
+الألعاب
+</option>
+
+
+<option>
+Arduino
+</option>
+
+
+<option>
+PLC
+</option>
+
+
+<option>
+سيارات
+</option>
+
+
+<option>
+دراجات
+</option>
+
+
+<option>
+أدوات
+</option>
+
+
+</select>
+
+
+
+
+
+<br><br>
+
+
+
+
+<input id="subcategory"
+placeholder="القسم الفرعي">
+
+
+
+<br><br>
+
+
+
+
+
+<input id="price"
+placeholder="السعر الحالي">
+
+
+
+<br><br>
+
+
+
+
+<input id="oldPrice"
+placeholder="السعر قبل الخصم">
+
+
+
+<br><br>
+
+
+
+
+<select id="status">
+
+
+<option>
+متوفر
+</option>
+
+
+<option>
+عرض خاص
+</option>
+
+
+<option>
+غير متوفر
+</option>
+
+
+</select>
+
+
+
+<br><br>
+
+
+
+
+
+<div class="file-box">
+
+
+<label>
+📷 اختر صورة المنتج
+</label>
+
+
+<br><br>
+
+
+<input 
+type="file"
+id="imageFile"
+accept="image/*"
+onchange="previewImage(event)">
+
+
+
+<div id="preview"
+class="preview">
+
+</div>
+
+
+
+</div>
+
+
+
+
+<br>
+
+
+
+
+<textarea id="description"
+placeholder="وصف المنتج"></textarea>
+
+
+
+
+<br><br>
+
+
+
+
+<button onclick="saveProduct()">
+
+💾 حفظ المنتج
+
+</button>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<section class="products">
+
+
+<h2>
+📦 المنتجات
+</h2>
+
+
+
+<input id="search"
+placeholder="بحث..."
+onkeyup="showProducts()">
+
+
+
+<div id="admin-products"
+class="products">
+
+</div>
+
+
+
+</section>
+<script>
+
+
+let data =
+
+JSON.parse(
+localStorage.getItem("products")
+)
+
+||
+
+products;
+
+
+
+let selectedImage = "";
+
+
+
+
+// =============================
+// معاينة الصورة
+// =============================
+
+
+function previewImage(event){
+
+
+let file =
+event.target.files[0];
+
+
+if(!file)
+return;
+
+
+
+let reader =
+new FileReader();
+
+
+
+reader.onload = function(e){
+
+
+selectedImage =
+e.target.result;
+
+
+
+document.getElementById("preview").innerHTML = `
+
+<img src="${selectedImage}">
+
+`;
+
+
+
+}
+
+
+
+reader.readAsDataURL(file);
+
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// حفظ المنتج
+// =============================
+
+
+function saveProduct(){
+
+
+
+let id =
+document.getElementById("productId").value;
+
+
+
+let oldProduct =
+
+data.find(
+p=>p.id==id
+);
+
+
+
+
+
+let images=[];
+
+
+
+
+if(selectedImage){
+
+
+images=[selectedImage];
+
+
+}
+
+else if(oldProduct){
+
+
+images =
+oldProduct.images || [];
+
+
+}
+
+
+
+
+
+
+
+let item={
+
+
+id:
+
+id ?
+
+Number(id)
+
+:
+
+Date.now(),
+
+
+
+name:
+
+document.getElementById("name").value,
+
+
+
+category:
+
+document.getElementById("category").value,
+
+
+
+subcategory:
+
+document.getElementById("subcategory").value,
+
+
+
+images:images,
+
+
+
+image:
+
+images[0] || "",
+
+
+
+price:
+
+document.getElementById("price").value,
+
+
+
+oldPrice:
+
+document.getElementById("oldPrice").value,
+
+
+
+status:
+
+document.getElementById("status").value,
+
+
+
+description:
+
+document.getElementById("description").value
+
+
+
+};
+
+
+
+
+
+
+
+if(id){
+
+
+data =
+
+data.map(p=>
+
+p.id==id ? item : p
+
+);
+
+
+
+}
+
+else{
+
+
+data.push(item);
+
+
+}
+
+
+
+
+
+
+
+localStorage.setItem(
+
+"products",
+
+JSON.stringify(data)
+
+);
+
+
+
+
+
+
+alert("تم حفظ المنتج بنجاح");
+
+
+
+clearForm();
+
+showProducts();
+
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// عرض المنتجات
+// =============================
+
+
+function showProducts(){
+
+
+
+let box =
+
+document.getElementById(
+"admin-products"
+);
+
+
+
+let search =
+
+document.getElementById(
+"search"
+).value.toLowerCase();
+
+
+
+
+
+box.innerHTML="";
+
+
+
+
+
+data
+
+.filter(p=>
+
+p.name.toLowerCase()
+.includes(search)
+
+)
+
+.forEach(p=>{
+
+
+
+let img =
+
+p.images &&
+p.images.length
+
+?
+
+p.images[0]
+
+:
+
+"";
+
+
+
+
+
+box.innerHTML += `
+
+
+<div class="product-card">
+
+
+<img src="${img}">
+
+
+<h3>
+${p.name}
+</h3>
+
+
+
+<p>
+${p.price}
+</p>
+
+
+
+<button onclick="editProduct(${p.id})">
+
+✏️ تعديل
+
+</button>
+
+
+
+<button onclick="deleteProduct(${p.id})">
+
+🗑 حذف
+
+</button>
+
+
+</div>
+
+
+`;
+
+
+
+
+});
+
+
+
+}
+
+
+
+
+
+
+
+// =============================
+// تعديل منتج
+// =============================
+
+
+function editProduct(id){
+
+
+
+let p =
+
+data.find(
+x=>x.id==id
+);
+
+
+
+document.getElementById("productId").value=p.id;
+
+
+document.getElementById("name").value=p.name;
+
+
+document.getElementById("category").value=p.category;
+
+
+document.getElementById("subcategory").value=
+p.subcategory || "";
+
+
+document.getElementById("price").value=
+p.price;
+
+
+document.getElementById("oldPrice").value=
+p.oldPrice || "";
+
+
+document.getElementById("status").value=
+p.status || "متوفر";
+
+
+document.getElementById("description").value=
+p.description || "";
+
+
+
+selectedImage =
+p.images ? p.images[0] : "";
+
+
+
+document.getElementById("preview").innerHTML =
+
+selectedImage ?
+
+`
+<img src="${selectedImage}">
+`
+
+:
+
+"";
+
+
+
+
+window.scrollTo(0,0);
+
+
+
+}
+
+
+
+
+
+
+// =============================
+// حذف منتج
+// =============================
+
+
+function deleteProduct(id){
+
+
+
+if(confirm("هل تريد حذف المنتج؟")){
+
+
+
+data =
+
+data.filter(
+p=>p.id!=id
+);
+
+
+
+localStorage.setItem(
+
+"products",
+
+JSON.stringify(data)
+
+);
+
+
+
+showProducts();
+
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+// =============================
+// تنظيف النموذج
+// =============================
+
+
+function clearForm(){
+
+
+
+document
+.querySelectorAll(
+"input,textarea"
+)
+
+.forEach(e=>{
+
+
+if(
+e.id!="search"
+&&
+e.id!="productId"
+){
+
+e.value="";
+
+}
+
+
+});
+
+
+
+
+document.getElementById("preview").innerHTML="";
+
+
+selectedImage="";
+
+
+
+document.getElementById("productId").value="";
+
+
+
+}
+
+
+
+
+showProducts();
+
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>
+أقسام المتجر | أمازون ذي قار
+</title>
+
+
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+
+
+<body>
+
+
+
+
+<header>
+
+<div class="logo">
+🛒 أمازون ذي قار
+</div>
+
+
+<div class="search">
+
+<input id="searchInput"
+placeholder="ابحث عن منتج...">
+
+
+<button>
+🔍 بحث
+</button>
+
+
+</div>
+
+
+</header>
+
+
+
+
+
+
+<nav>
+
+
+<a href="index.html">
+🏠 الرئيسية
+</a>
+
+
+<a href="products.html">
+🛒 جميع المنتجات
+</a>
+
+
+<a href="categories.html">
+📂 الأقسام
+</a>
+
+
+<a href="contact.html">
+📞 تواصل معنا
+</a>
+
+
+</nav>
+
+
+
+
+
+
+
+
+<section class="hero">
+
+
+<h1>
+📂 أقسام المتجر
+</h1>
+
+
+<p>
+تصفح الأقسام والمنتجات
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="categories">
+
+
+<h2>
+الأقسام الرئيسية
+</h2>
+
+
+
+<div id="categories-container"
+class="categories">
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<div class="float-contact">
+
+
+<a class="whatsapp">
+💬
+</a>
+
+
+<a class="telegram">
+✈️
+</a>
+
+
+<a class="facebook">
+f
+</a>
+
+
+</div>
+
+
+
+
+
+
+
+
+<footer>
+
+
+<h3>
+أمازون ذي قار
+</h3>
+
+
+<p>
+السوق الإلكتروني الشامل
+</p>
+
+
+</footer>
+
+
+
+
+
+
+
+
+
+<script src="products-data.js"></script>
+
+<script src="script.js"></script>
+
+
+
+<script>
+
+
+
+function loadCategories(){
+
+
+
+let productsList =
+getProducts();
+
+
+
+
+let categories = {};
+
+
+
+
+
+productsList.forEach(product=>{
+
+
+
+if(!categories[product.category]){
+
+
+categories[product.category]=[];
+
+
+}
+
+
+
+
+if(product.subcategory){
+
+
+if(
+!categories[product.category]
+.includes(product.subcategory)
+){
+
+
+categories[product.category]
+.push(product.subcategory);
+
+
+}
+
+
+}
+
+
+
+});
+
+
+
+
+
+
+
+let box =
+document.getElementById(
+"categories-container"
+);
+
+
+
+
+
+box.innerHTML="";
+
+
+
+
+
+
+Object.keys(categories)
+.forEach(category=>{
+
+
+
+
+
+let subs =
+categories[category];
+
+
+
+
+
+
+box.innerHTML += `
+
+
+
+<div class="category-box">
+
+
+<h3>
+
+${category}
+
+</h3>
+
+
+
+
+
+${
+subs.length ?
+
+`
+
+<ul>
+
+${
+
+subs.map(sub=>
+
+`
+
+<li>
+${sub}
+</li>
+
+`
+
+).join("")
+
+}
+
+</ul>
+
+`
+
+:
+
+`
+
+<p>
+جميع المنتجات
+</p>
+
+`
+
+}
+
+
+
+
+
+<a href="products.html">
+
+عرض المنتجات
+
+</a>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+
+
+});
+
+
+
+
+
+}
+
+
+
+
+
+
+
+loadCategories();
+
+
+
+</script>
+
+
+
+
+
+</body>
+
+</html>

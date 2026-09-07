@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>
+جميع المنتجات | أمازون ذي قار
+</title>
+
+
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+
+
+<body>
+
+
+
+
+<header>
+
+
+<div class="logo">
+🛒 أمازون ذي قار
+</div>
+
+
+
+<div class="search">
+
+
+<input id="searchInput"
+placeholder="ابحث عن منتج...">
+
+
+<button>
+🔍 بحث
+</button>
+
+
+</div>
+
+
+</header>
+
+
+
+
+
+
+<nav>
+
+
+<a href="index.html">
+🏠 الرئيسية
+</a>
+
+
+<a href="products.html">
+🛒 جميع المنتجات
+</a>
+
+
+<a href="categories.html">
+📂 الأقسام
+</a>
+
+
+<a href="contact.html">
+📞 تواصل معنا
+</a>
+
+
+</nav>
+
+
+
+
+
+
+
+
+
+<section class="hero">
+
+
+<h1>
+🛒 جميع المنتجات
+</h1>
+
+
+<p>
+اختر القسم أو ابحث عن المنتج
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="categories">
+
+
+<h2>
+🔎 فلترة المنتجات
+</h2>
+
+
+
+<div class="category-box">
+
+
+<select id="categoryFilter"
+onchange="updateSubcategories()">
+
+
+<option value="">
+كل الأقسام
+</option>
+
+
+</select>
+
+
+
+<br><br>
+
+
+
+<select id="subcategoryFilter"
+onchange="filterProducts()">
+
+
+
+<option value="">
+كل الأقسام الفرعية
+</option>
+
+
+</select>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="products">
+
+
+<h2>
+🔥 المنتجات
+</h2>
+
+
+
+<div id="all-products"
+class="products">
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<div class="float-contact">
+
+
+<a class="whatsapp">
+💬
+</a>
+
+
+<a class="telegram">
+✈️
+</a>
+
+
+<a class="facebook">
+f
+</a>
+
+
+</div>
+
+
+
+
+
+
+
+<footer>
+
+
+<h3>
+أمازون ذي قار
+</h3>
+
+
+<p>
+السوق الإلكتروني الشامل
+</p>
+
+
+</footer>
+
+
+
+
+
+
+
+<script src="products-data.js"></script>
+
+<script src="script.js"></script>
+
+
+
+
+
+<script>
+
+
+
+let currentProducts =
+getProducts();
+
+
+
+
+
+function loadFilters(){
+
+
+
+let categoryBox =
+document.getElementById(
+"categoryFilter"
+);
+
+
+
+let categories =
+[];
+
+
+
+
+currentProducts.forEach(p=>{
+
+
+if(
+!categories.includes(p.category)
+){
+
+
+categories.push(p.category);
+
+
+}
+
+
+});
+
+
+
+
+
+categories.forEach(c=>{
+
+
+categoryBox.innerHTML += `
+
+<option value="${c}">
+${c}
+</option>
+
+`;
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+function updateSubcategories(){
+
+
+
+let category =
+document.getElementById(
+"categoryFilter"
+).value;
+
+
+
+
+let subBox =
+document.getElementById(
+"subcategoryFilter"
+);
+
+
+
+subBox.innerHTML =
+
+`
+<option value="">
+كل الأقسام الفرعية
+</option>
+`;
+
+
+
+
+
+let subs=[];
+
+
+
+
+currentProducts
+
+.filter(p=>
+
+!category ||
+
+p.category===category
+
+)
+
+.forEach(p=>{
+
+
+
+if(
+p.subcategory &&
+!subs.includes(p.subcategory)
+
+){
+
+
+subs.push(p.subcategory);
+
+
+}
+
+
+
+});
+
+
+
+
+
+subs.forEach(s=>{
+
+
+subBox.innerHTML += `
+
+<option value="${s}">
+${s}
+</option>
+
+`;
+
+
+
+});
+
+
+
+
+filterProducts();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function filterProducts(){
+
+
+
+let category =
+document.getElementById(
+"categoryFilter"
+).value;
+
+
+
+
+let sub =
+document.getElementById(
+"subcategoryFilter"
+).value;
+
+
+
+
+
+
+let box =
+document.getElementById(
+"all-products"
+);
+
+
+
+
+
+let list =
+currentProducts.filter(p=>{
+
+
+return (
+
+(!category ||
+p.category===category)
+
+&&
+
+(!sub ||
+p.subcategory===sub)
+
+);
+
+
+});
+
+
+
+
+
+box.innerHTML="";
+
+
+
+
+
+list.forEach(product=>{
+
+
+
+let img =
+
+product.images &&
+product.images.length
+
+?
+
+product.images[0]
+
+:
+
+product.image;
+
+
+
+
+
+box.innerHTML += `
+
+
+
+<div class="product-card">
+
+
+<img src="${img}">
+
+
+
+<h3>
+${product.name}
+</h3>
+
+
+
+<p>
+${product.price}
+</p>
+
+
+
+
+<a href="product.html?id=${product.id}">
+عرض المنتج
+</a>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+});
+
+
+
+}
+
+
+
+
+
+loadFilters();
+
+filterProducts();
+
+
+
+</script>
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+تفاصيل المنتج | أمازون ذي قار
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+
+<style>
+
+.gallery-main img{
+
+width:100%;
+
+max-width:450px;
+
+border-radius:15px;
+
+}
+
+
+.gallery-small{
+
+display:flex;
+
+gap:10px;
+
+margin-top:15px;
+
+}
+
+
+.gallery-small img{
+
+width:80px;
+
+height:80px;
+
+object-fit:cover;
+
+border-radius:8px;
+
+cursor:pointer;
+
+border:2px solid #ddd;
+
+}
+
+
+.price-old{
+
+text-decoration:line-through;
+
+color:#888;
+
+}
+
+
+.status{
+
+font-weight:bold;
+
+margin:15px 0;
+
+}
+
+
+.whatsapp-order{
+
+display:inline-block;
+
+background:#25D366;
+
+color:white;
+
+padding:12px 25px;
+
+border-radius:10px;
+
+text-decoration:none;
+
+margin-top:15px;
+
+}
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<header>
+
+<div class="logo">
+🛒 أمازون ذي قار
+</div>
+
+
+<div class="search">
+
+<input id="searchInput"
+placeholder="ابحث عن منتج...">
+
+
+<button>
+🔍 بحث
+</button>
+
+</div>
+
+
+</header>
+
+
+
+
+
+<nav>
+
+<a href="index.html">
+🏠 الرئيسية
+</a>
+
+
+<a href="products.html">
+🛒 المنتجات
+</a>
+
+
+<a href="categories.html">
+📂 الأقسام
+</a>
+
+
+<a href="contact.html">
+📞 تواصل معنا
+</a>
+
+
+</nav>
+
+
+
+
+
+<section id="product-details"
+class="product-details">
+
+</section>
+
+
+
+
+
+<section class="products">
+
+<h2>
+منتجات مشابهة
+</h2>
+
+
+<div id="related-products"
+class="products">
+
+</div>
+
+
+</section>
+<div class="float-contact">
+
+<a class="whatsapp">
+💬
+</a>
+
+
+<a class="telegram">
+✈️
+</a>
+
+
+<a class="facebook">
+f
+</a>
+
+</div>
+
+
+
+
+
+<footer>
+
+<h3>
+أمازون ذي قار
+</h3>
+
+
+<p>
+سوقك الإلكتروني الشامل
+</p>
+
+
+</footer>
+
+
+
+
+
+
+
+<script src="products-data.js"></script>
+
+<script src="script.js"></script>
+
+
+
+
+<script>
+
+
+// جلب رقم المنتج
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+
+const id =
+Number(params.get("id"));
+
+
+
+
+
+// قراءة المنتجات من الإدارة أو الملف الأساسي
+
+let allProducts =
+
+JSON.parse(
+localStorage.getItem("products")
+)
+
+||
+
+products;
+
+
+
+
+
+// المنتج المطلوب
+
+const product =
+
+allProducts.find(
+p=>p.id == id
+);
+
+
+
+
+
+
+const box =
+
+document.getElementById(
+"product-details"
+);
+
+
+
+
+
+
+if(product){
+
+
+
+let images =
+
+product.images && product.images.length
+
+?
+
+product.images
+
+:
+
+[product.image];
+
+
+
+
+
+
+box.innerHTML = `
+
+
+
+<div class="product-image">
+
+
+<div class="gallery-main">
+
+
+<img id="main-image"
+src="${images[0]}">
+
+
+</div>
+
+
+
+
+<div class="gallery-small">
+
+
+${
+
+images.map(img=>`
+
+<img src="${img}"
+onclick="changeImage('${img}')">
+
+`).join("")
+
+}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="product-info">
+
+
+<h1>
+${product.name}
+</h1>
+
+
+
+<h2>
+${product.price}
+</h2>
+
+
+
+
+
+${product.oldPrice ?
+
+`
+
+<p class="price-old">
+
+${product.oldPrice}
+
+</p>
+
+`
+
+:
+
+""
+
+}
+
+
+
+
+
+
+<p class="status">
+
+الحالة:
+${product.status || "متوفر"}
+
+</p>
+
+
+
+
+
+
+<p>
+
+${product.description || ""}
+
+</p>
+
+
+
+
+
+
+<p>
+
+📂 القسم:
+${product.category}
+
+</p>
+
+
+
+
+
+
+<a 
+id="whatsapp-order"
+class="whatsapp-order"
+target="_blank">
+
+📱 اطلب عبر واتساب
+
+</a>
+
+
+
+
+
+</div>
+
+
+`;
+
+
+
+
+
+
+// زر واتساب الذكي
+
+
+let phone =
+"9647822980189";
+
+
+
+let message =
+
+`السلام عليكم،
+
+أرغب بشراء المنتج:
+
+${product.name}
+
+السعر:
+${product.price}
+
+من متجر أمازون ذي قار.`;
+
+
+
+
+document.getElementById(
+"whatsapp-order"
+).href =
+
+
+"https://wa.me/"
++
+phone
++
+"?text="
++
+encodeURIComponent(message);
+
+
+
+
+
+
+
+
+// المنتجات المشابهة
+
+
+let related =
+
+document.getElementById(
+"related-products"
+);
+
+
+
+
+
+allProducts
+
+.filter(p=>
+
+p.category == product.category
+&&
+p.id != product.id
+
+)
+
+.forEach(p=>{
+
+
+let img =
+
+p.images && p.images.length
+
+?
+
+p.images[0]
+
+:
+
+p.image;
+
+
+
+
+related.innerHTML += `
+
+
+<div class="product-card">
+
+
+<img src="${img}">
+
+
+<h3>
+
+${p.name}
+
+</h3>
+
+
+<p>
+
+${p.price}
+
+</p>
+
+
+<a href="product.html?id=${p.id}">
+
+عرض المنتج
+
+</a>
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+
+
+
+}
+
+else{
+
+
+box.innerHTML =
+
+`
+
+<h2>
+المنتج غير موجود
+</h2>
+
+`;
+
+
+
+}
+
+
+
+
+
+
+
+function changeImage(src){
+
+
+document.getElementById(
+"main-image"
+).src=src;
+
+
+}
+
+
+
+</script>
+
+
+
+
+
+</body>
+
+</html>
