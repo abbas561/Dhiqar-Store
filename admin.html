@@ -296,567 +296,261 @@ class="products">
 
 
 </section>
-<script>
 
+<script type="module">
 
-let data =
+import { initializeApp } 
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-JSON.parse(
-localStorage.getItem("products")
-)
-
-||
-
-products;
-
-
-
-let selectedImage = "";
-
-
-
-
-// =============================
-// معاينة الصورة
-// =============================
-
-
-function previewImage(event){
-
-
-let file =
-event.target.files[0];
-
-
-if(!file)
-return;
-
-
-
-let reader =
-new FileReader();
-
-
-
-reader.onload = function(e){
-
-
-selectedImage =
-e.target.result;
-
-
-
-document.getElementById("preview").innerHTML = `
-
-<img src="${selectedImage}">
-
-`;
-
-
-
+import {
+getFirestore,
+collection,
+getDocs,
+addDoc,
+updateDoc,
+deleteDoc,
+doc
 }
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
+const firebaseConfig = {
 
-reader.readAsDataURL(file);
-
-
-
-}
-
-
-
-
-
-
-
-
-// =============================
-// حفظ المنتج
-// =============================
-
-
-function saveProduct(){
-
-
-
-let id =
-document.getElementById("productId").value;
-
-
-
-let oldProduct =
-
-data.find(
-p=>p.id==id
-);
-
-
-
-
-
-let images=[];
-
-
-
-
-if(selectedImage){
-
-
-images=[selectedImage];
-
-
-}
-
-else if(oldProduct){
-
-
-images =
-oldProduct.images || [];
-
-
-}
-
-
-
-
-
-
-
-let item={
-
-
-id:
-
-id ?
-
-Number(id)
-
-:
-
-Date.now(),
-
-
-
-name:
-
-document.getElementById("name").value,
-
-
-
-category:
-
-document.getElementById("category").value,
-
-
-
-subcategory:
-
-document.getElementById("subcategory").value,
-
-
-
-images:images,
-
-
-
-image:
-
-images[0] || "",
-
-
-
-price:
-
-document.getElementById("price").value,
-
-
-
-oldPrice:
-
-document.getElementById("oldPrice").value,
-
-
-
-status:
-
-document.getElementById("status").value,
-
-
-
-description:
-
-document.getElementById("description").value
-
-
+apiKey: "AIzaSyB6Xqmz-CMzvL0TS0Bn1cmNqmd8QdJVAuA",
+authDomain: "dhiqar-store.firebaseapp.com",
+projectId: "dhiqar-store",
+storageBucket: "dhiqar-store.firebasestorage.app",
+messagingSenderId: "218844146604",
+appId: "1:218844146604:web:298a1a028d3c96c7e2a809"
 
 };
 
 
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+let data=[];
+let selectedImage="";
+
+
+// معاينة الصورة
+window.previewImage=function(event){
+
+let file=event.target.files[0];
+
+if(!file) return;
+
+let reader=new FileReader();
+
+reader.onload=function(e){
+
+selectedImage=e.target.result;
+
+document.getElementById("preview").innerHTML=
+`<img src="${selectedImage}">`;
+
+}
+
+reader.readAsDataURL(file);
+
+}
 
 
 
+// قراءة المنتجات من Firebase
+
+async function loadData(){
+
+let snap=await getDocs(collection(db,"products"));
+
+data=[];
+
+snap.forEach(item=>{
+
+data.push({
+id:item.id,
+...item.data()
+});
+
+});
+
+showProducts();
+
+}
+
+
+async function saveProduct(){
+
+let id=document.getElementById("productId").value;
+
+let item={
+
+name:document.getElementById("name").value,
+category:document.getElementById("category").value,
+subcategory:document.getElementById("subcategory").value,
+images:selectedImage ? [selectedImage] : [],
+image:selectedImage || "",
+price:document.getElementById("price").value,
+oldPrice:document.getElementById("oldPrice").value,
+status:document.getElementById("status").value,
+description:document.getElementById("description").value
+
+};
 
 
 if(id){
 
+await updateDoc(doc(db,"products",id),item);
 
-data =
+}else{
 
-data.map(p=>
-
-p.id==id ? item : p
-
-);
-
-
-
-}
-
-else{
-
-
-data.push(item);
-
+await addDoc(collection(db,"products"),item);
 
 }
 
 
-
-
-
-
-
-localStorage.setItem(
-
-"products",
-
-JSON.stringify(data)
-
-);
-
-
-
-
-
-
-alert("تم حفظ المنتج بنجاح");
-
-
+alert("تم حفظ المنتج في السحابة");
 
 clearForm();
 
-showProducts();
-
-
+await loadData();
 
 }
 
 
 
+async function showProducts(){
 
+let box=document.getElementById("admin-products");
 
-
-
-
-// =============================
-// عرض المنتجات
-// =============================
-
-
-function showProducts(){
-
-
-
-let box =
-
-document.getElementById(
-"admin-products"
-);
-
-
-
-let search =
-
-document.getElementById(
-"search"
-).value.toLowerCase();
-
-
-
-
+let search=document.getElementById("search").value.toLowerCase();
 
 box.innerHTML="";
 
 
-
-
-
 data
-
-.filter(p=>
-
-p.name.toLowerCase()
-.includes(search)
-
-)
-
+.filter(p=>p.name.toLowerCase().includes(search))
 .forEach(p=>{
 
 
-
-let img =
-
-p.images &&
-p.images.length
-
-?
-
-p.images[0]
-
-:
-
-"";
+let img=p.images && p.images.length ? p.images[0] : "";
 
 
-
-
-
-box.innerHTML += `
-
+box.innerHTML +=`
 
 <div class="product-card">
 
-
 <img src="${img}">
 
+<h3>${p.name}</h3>
 
-<h3>
-${p.name}
-</h3>
-
+<p>${p.price}</p>
 
 
-<p>
-${p.price}
-</p>
-
-
-
-<button onclick="editProduct(${p.id})">
-
+<button onclick="editProduct('${p.id}')">
 ✏️ تعديل
-
 </button>
 
 
-
-<button onclick="deleteProduct(${p.id})">
-
+<button onclick="deleteProduct('${p.id}')">
 🗑 حذف
-
 </button>
 
 
 </div>
 
-
 `;
-
-
-
 
 });
 
 
-
 }
 
 
 
+window.editProduct=function(id){
 
+let p=data.find(x=>x.id==id);
 
-
-
-// =============================
-// تعديل منتج
-// =============================
-
-
-function editProduct(id){
-
-
-
-let p =
-
-data.find(
-x=>x.id==id
-);
-
+if(!p)return;
 
 
 document.getElementById("productId").value=p.id;
+document.getElementById("name").value=p.name||"";
+document.getElementById("category").value=p.category||"";
+document.getElementById("subcategory").value=p.subcategory||"";
+document.getElementById("price").value=p.price||"";
+document.getElementById("oldPrice").value=p.oldPrice||"";
+document.getElementById("status").value=p.status||"متوفر";
+document.getElementById("description").value=p.description||"";
+
+selectedImage=p.image||"";
 
 
-document.getElementById("name").value=p.name;
-
-
-document.getElementById("category").value=p.category;
-
-
-document.getElementById("subcategory").value=
-p.subcategory || "";
-
-
-document.getElementById("price").value=
-p.price;
-
-
-document.getElementById("oldPrice").value=
-p.oldPrice || "";
-
-
-document.getElementById("status").value=
-p.status || "متوفر";
-
-
-document.getElementById("description").value=
-p.description || "";
-
-
-
-selectedImage =
-p.images ? p.images[0] : "";
-
-
-
-document.getElementById("preview").innerHTML =
-
-selectedImage ?
-
-`
-<img src="${selectedImage}">
-`
-
-:
-
-"";
-
-
-
+document.getElementById("preview").innerHTML=
+selectedImage ? `<img src="${selectedImage}">` : "";
 
 window.scrollTo(0,0);
 
-
-
 }
 
 
 
 
-
-
-// =============================
-// حذف منتج
-// =============================
-
-
-function deleteProduct(id){
-
-
+window.deleteProduct=async function(id){
 
 if(confirm("هل تريد حذف المنتج؟")){
 
+await deleteDoc(doc(db,"products",id));
 
-
-data =
-
-data.filter(
-p=>p.id!=id
-);
-
-
-
-localStorage.setItem(
-
-"products",
-
-JSON.stringify(data)
-
-);
-
-
-
-showProducts();
-
-
+await loadData();
 
 }
 
-
-
 }
 
-
-
-
-
-
-
-// =============================
-// تنظيف النموذج
-// =============================
 
 
 function clearForm(){
 
+document.querySelectorAll("input,textarea").forEach(e=>{
 
-
-document
-.querySelectorAll(
-"input,textarea"
-)
-
-.forEach(e=>{
-
-
-if(
-e.id!="search"
-&&
-e.id!="productId"
-){
-
+if(e.id!="search" && e.id!="productId")
 e.value="";
-
-}
-
 
 });
 
 
-
-
 document.getElementById("preview").innerHTML="";
-
 
 selectedImage="";
 
-
-
 document.getElementById("productId").value="";
-
-
 
 }
 
 
 
+window.showProducts=function(){
 
 showProducts();
 
+}
+
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+document.getElementById("search")
+.addEventListener("keyup",showProducts);
+
+loadData();
+
+});
 
 
 </script>
+
 
 
 </body>
