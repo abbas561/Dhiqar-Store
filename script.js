@@ -90,7 +90,7 @@ product.image || "";
 
 
 
-box.innerHTML += 
+box.innerHTML += `
 
 <div class="product-card">
 
@@ -109,6 +109,9 @@ ${product.price}
 </a>
 
 </div>
+
+`;
+
 
 ;
 
