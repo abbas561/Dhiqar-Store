@@ -94,7 +94,7 @@ async function loadProducts(containerId, category=null){
 
 
 
-        box.innerHTML += 
+        box.innerHTML += `
 
         <div class="product-card">
 
@@ -114,7 +114,7 @@ async function loadProducts(containerId, category=null){
 
         </div>
 
-        ;
+        `;
 
 
     });
