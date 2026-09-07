@@ -1,45 +1,34 @@
 // =====================================
 // أمازون ذي قار
-// Firebase Products System
+// Final Script v3
+// Live Search + Products System
 // =====================================
 
-import { db } from "./firebase.js";
 
-import {
-collection,
-getDocs
+
+// =============================
+// جلب المنتجات
+// =============================
+
+
+function getProducts(){
+
+
+let saved =
+localStorage.getItem("products");
+
+
+
+if(saved){
+
+return JSON.parse(saved);
+
 }
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
 
-// جلب المنتجات من Firebase
+return products || [];
 
-async function getProducts(){
-
-let items=[];
-
-
-let snapshot = await getDocs(
-collection(db,"products")
-);
-
-
-snapshot.forEach(doc=>{
-
-items.push({
-
-id:doc.id,
-
-...doc.data()
-
-});
-
-
-});
-
-
-return items;
 
 }
 
@@ -48,13 +37,18 @@ return items;
 
 
 
+
+// =============================
 // عرض المنتجات
+// =============================
 
-async function loadProducts(containerId, category=null){
+
+function loadProducts(containerId, category = null){
 
 
-let container =
+const container =
 document.getElementById(containerId);
+
 
 
 if(!container) return;
@@ -62,18 +56,24 @@ if(!container) return;
 
 
 let items =
-await getProducts();
+getProducts();
+
 
 
 
 if(category){
 
+
 items =
 items.filter(p=>
-p.category===category
+
+p.category === category
+
 );
 
+
 }
+
 
 
 
@@ -81,31 +81,44 @@ container.innerHTML="";
 
 
 
+
 items.forEach(product=>{
 
 
+
 let img =
+
 product.images && product.images.length
+
 ?
+
 product.images[0]
+
 :
-product.image || "";
+
+product.image;
 
 
 
-container.innerHTML += 
+
+container.innerHTML += `
+
 
 <div class="product-card">
 
+
 <img src="${img}">
+
 
 <h3>
 ${product.name}
 </h3>
 
+
 <p>
 ${product.price}
 </p>
+
 
 
 <a href="product.html?id=${product.id}">
@@ -113,12 +126,16 @@ ${product.price}
 </a>
 
 
+
 </div>
 
-;
+
+`;
+
 
 
 });
+
 
 
 }
@@ -129,67 +146,333 @@ ${product.price}
 
 
 
-// التواصل
 
-const WHATSAPP="9647822980189";
-
-const TELEGRAM="https://t.me/ss_iraq1";
-
-const FACEBOOK="https://www.facebook.com/share/1FC5hwZSbt/";
+// =============================
+// البحث المباشر
+// =============================
 
 
+function setupLiveSearch(){
 
-function setupContact(){
 
 
-document.querySelectorAll(".whatsapp")
-.forEach(btn=>{
+let input =
+document.getElementById("searchInput");
 
-btn.href="https://wa.me/"+WHATSAPP;
 
-btn.target="_blank";
+
+if(!input) return;
+
+
+
+// إنشاء صندوق النتائج
+
+let box =
+document.createElement("div");
+
+
+box.id="search-results";
+
+
+box.style.position="absolute";
+
+box.style.background="white";
+
+box.style.zIndex="999";
+
+box.style.width="300px";
+
+box.style.boxShadow="0 5px 15px #ccc";
+
+box.style.borderRadius="10px";
+
+box.style.overflow="hidden";
+
+
+
+
+input.parentElement.style.position="relative";
+
+
+input.parentElement.appendChild(box);
+
+
+
+
+
+
+input.addEventListener(
+"input",
+function(){
+
+
+
+let value =
+this.value
+.toLowerCase()
+.trim();
+
+
+
+box.innerHTML="";
+
+
+
+if(!value){
+
+box.style.display="none";
+
+return;
+
+}
+
+
+
+
+
+
+let results =
+
+getProducts()
+
+.filter(product=>
+
+
+product.name
+.toLowerCase()
+.includes(value)
+
+)
+
+.slice(0,6);
+
+
+
+
+
+
+results.forEach(product=>{
+
+
+
+let img =
+
+product.images &&
+product.images.length
+
+?
+
+product.images[0]
+
+:
+
+product.image;
+
+
+
+
+
+box.innerHTML += `
+
+
+<div style="
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px;
+cursor:pointer;
+border-bottom:1px solid #ddd;
+"
+onclick="window.location='product.html?id=${product.id}'">
+
+
+<img src="${img}"
+width="50"
+height="50"
+style="object-fit:cover;border-radius:5px;">
+
+
+<div>
+
+
+<b>
+${product.name}
+</b>
+
+
+<br>
+
+
+<span>
+${product.price}
+</span>
+
+
+</div>
+
+
+
+</div>
+
+
+
+`;
+
+
 
 });
 
 
 
-document.querySelectorAll(".telegram")
-.forEach(btn=>{
-
-btn.href=TELEGRAM;
-
-btn.target="_blank";
-
-});
 
 
+if(results.length){
 
-document.querySelectorAll(".facebook")
-.forEach(btn=>{
 
-btn.href=FACEBOOK;
-
-btn.target="_blank";
-
-});
+box.style.display="block";
 
 
 }
+
+else{
+
+
+box.style.display="none";
+
+
+}
+
+
+
+});
 
 
 
 
 
 document.addEventListener(
-"DOMContentLoaded",
-()=>{
+"click",
+function(e){
 
 
-setupContact();
+if(!box.contains(e.target)
+&&
+e.target!==input){
+
+
+box.style.display="none";
+
+
+}
+
 
 
 });
 
 
 
-window.loadProducts=loadProducts;
+}
+
+
+
+
+
+
+
+
+// =============================
+// التواصل
+// =============================
+
+
+const WHATSAPP =
+"9647822980189";
+
+
+const TELEGRAM =
+"https://t.me/ss_iraq1";
+
+
+const FACEBOOK =
+"https://www.facebook.com/share/1FC5hwZSbt/";
+
+
+
+
+
+function setupContact(){
+
+
+
+document
+.querySelectorAll(".whatsapp")
+.forEach(btn=>{
+
+
+btn.href =
+"https://wa.me/"+WHATSAPP;
+
+
+btn.target="_blank";
+
+
+});
+
+
+
+
+document
+.querySelectorAll(".telegram")
+.forEach(btn=>{
+
+
+btn.href=TELEGRAM;
+
+btn.target="_blank";
+
+
+});
+
+
+
+
+document
+.querySelectorAll(".facebook")
+.forEach(btn=>{
+
+
+btn.href=FACEBOOK;
+
+btn.target="_blank";
+
+
+});
+
+
+
+}
+
+
+
+
+
+
+
+// =============================
+// تشغيل
+// =============================
+
+
+document.addEventListener(
+"DOMContentLoaded",
+function(){
+
+
+setupLiveSearch();
+
+
+setupContact();
+
+
+
+});
