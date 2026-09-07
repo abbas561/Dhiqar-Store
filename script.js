@@ -1,14 +1,15 @@
 // =====================================
 // أمازون ذي قار
-// Firebase Products Script
+// Firebase Products System
 // =====================================
 
+import { db } from "./firebase.js";
 
 import {
-    db,
-    collection,
-    getDocs
-} from "./firebase.js";
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
 
@@ -16,36 +17,27 @@ import {
 
 async function getProducts(){
 
-    let products = [];
+let items = [];
 
-    try{
-
-        const snapshot =
-        await getDocs(
-            collection(db,"products")
-        );
+let snapshot = await getDocs(
+collection(db,"products")
+);
 
 
-        snapshot.forEach(doc=>{
+snapshot.forEach(doc=>{
 
-            products.push({
+items.push({
 
-                id:doc.id,
-                ...doc.data()
+id: doc.id,
 
-            });
+...doc.data()
 
-        });
+});
 
-
-    }catch(error){
-
-        console.log(error);
-
-    }
+});
 
 
-    return products;
+return items;
 
 }
 
@@ -58,128 +50,11 @@ async function getProducts(){
 async function loadProducts(containerId, category=null){
 
 
-const container =
+let box =
 document.getElementById(containerId);
 
 
-if(!container) return;
-
-
-
-let items =
-await getProducts();
-
-
-
-if(category){
-
-items =
-items.filter(p=>
-p.category === category
-);
-
-}
-
-
-
-container.innerHTML="";
-
-
-
-items.forEach(product=>{
-
-
-let img =
-product.images &&
-product.images.length
-?
-product.images[0]
-:
-product.image;
-
-
-
-container.innerHTML += 
-
-<div class="product-card">
-
-<img src="${img || ''}">
-
-
-<h3>
-${product.name || ''}
-</h3>
-
-
-<p>
-${product.price || ''}
-</p>
-
-
-<a href="product.html?id=${product.id}">
-عرض المنتج
-</a>
-
-
-</div>
-
-;
-
-});
-
-
-}
-
-
-
-
-
-
-
-// البحث
-
-async function setupLiveSearch(){
-
-
-let input =
-document.getElementById("searchInput");
-
-
-if(!input) return;
-
-
-
-let box =
-document.createElement("div");
-
-
-box.id="search-results";
-
-
-input.parentElement.appendChild(box);
-
-
-
-input.addEventListener("input",async function(){
-
-
-let value =
-this.value
-.toLowerCase()
-.trim();
-
-
-
-box.innerHTML="";
-
-
-if(!value){
-
-box.style.display="none";
-
-return;
-
-}
+if(!box) return;
 
 
 
@@ -188,27 +63,50 @@ await getProducts();
 
 
 
-let results =
-products
-.filter(p=>
+if(category){
 
-p.name
-.toLowerCase()
-.includes(value)
+products =
+products.filter(p=>
+p.category === category
+);
 
-)
-.slice(0,6);
+}
 
 
 
-results.forEach(product=>{
+box.innerHTML="";
+
+
+
+products.forEach(product=>{
+
+
+let img =
+product.images && product.images.length
+?
+product.images[0]
+:
+product.image || "";
+
 
 
 box.innerHTML += 
 
-<div onclick="location.href='product.html?id=${product.id}'">
+<div class="product-card">
 
+<img src="${img}">
+
+<h3>
 ${product.name}
+</h3>
+
+<p>
+${product.price}
+</p>
+
+<a href="product.html?id=${product.id}">
+عرض المنتج
+</a>
 
 </div>
 
@@ -217,16 +115,41 @@ ${product.name}
 });
 
 
-
-box.style.display =
-results.length
-?
-"block"
-:
-"none";
+}
 
 
+
+
+
+function setupContact(){
+
+const whatsapp="9647822980189";
+
+const telegram="https://t.me/ss_iraq1";
+
+const facebook="https://www.facebook.com/share/1FC5hwZSbt/";
+
+
+
+document.querySelectorAll(".whatsapp")
+.forEach(btn=>{
+btn.href="https://wa.me/"+whatsapp;
 });
+
+
+
+document.querySelectorAll(".telegram")
+.forEach(btn=>{
+btn.href=telegram;
+});
+
+
+
+document.querySelectorAll(".facebook")
+.forEach(btn=>{
+btn.href=facebook;
+});
+
 
 }
 
@@ -238,16 +161,15 @@ document.addEventListener(
 "DOMContentLoaded",
 ()=>{
 
-
-setupLiveSearch();
-
+setupContact();
 
 }
 );
 
 
 
-// إتاحة الدالة للصفحات
 
-window.loadProducts =
-loadProducts;
+
+export {
+loadProducts
+};
