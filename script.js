@@ -6,38 +6,37 @@
 import { db } from "./firebase.js";
 
 import {
-collection,
-getDocs
+    collection,
+    getDocs
 }
 from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
 
 
 // جلب المنتجات من Firebase
 
 async function getProducts(){
 
-let items = [];
+    let items = [];
 
-let snapshot = await getDocs(
-collection(db,"products")
-);
-
-
-snapshot.forEach(doc=>{
-
-items.push({
-
-id: doc.id,
-
-...doc.data()
-
-});
-
-});
+    let snapshot = await getDocs(
+        collection(db,"products")
+    );
 
 
-return items;
+    snapshot.forEach(doc=>{
+
+        items.push({
+
+            id: doc.id,
+
+            ...doc.data()
+
+        });
+
+    });
+
+
+    return items;
 
 }
 
@@ -50,110 +49,122 @@ return items;
 async function loadProducts(containerId, category=null){
 
 
-let box =
-document.getElementById(containerId);
+    let box =
+    document.getElementById(containerId);
 
 
-if(!box) return;
-
-
-
-let products =
-await getProducts();
+    if(!box) return;
 
 
 
-if(category){
+    let products =
+    await getProducts();
 
-products =
-products.filter(p=>
-p.category === category
-);
+
+
+    if(category){
+
+        products =
+        products.filter(p=>
+            p.category === category
+        );
+
+    }
+
+
+
+    box.innerHTML = "";
+
+
+
+    products.forEach(product=>{
+
+
+        let img =
+        product.images &&
+        product.images.length
+
+        ?
+
+        product.images[0]
+
+        :
+
+        product.image || "";
+
+
+
+        box.innerHTML += 
+
+        <div class="product-card">
+
+            <img src="${img}">
+
+            <h3>
+            ${product.name}
+            </h3>
+
+            <p>
+            ${product.price}
+            </p>
+
+            <a href="product.html?id=${product.id}">
+            عرض المنتج
+            </a>
+
+        </div>
+
+        ;
+
+
+    });
+
 
 }
-
-
-
-box.innerHTML="";
-
-
-
-products.forEach(product=>{
-
-
-let img =
-product.images && product.images.length
-?
-product.images[0]
-:
-product.image || "";
-
-
-
-box.innerHTML += `
-
-<div class="product-card">
-
-<img src="${img}">
-
-<h3>
-${product.name}
-</h3>
-
-<p>
-${product.price}
-</p>
-
-<a href="product.html?id=${product.id}">
-عرض المنتج
-</a>
-
-</div>
-
-`;
-
-
-});
-
-
-}
-
-
-
-
+// التواصل
 
 function setupContact(){
 
-const whatsapp="9647822980189";
+    const whatsapp="9647822980189";
 
-const telegram="https://t.me/ss_iraq1";
+    const telegram="https://t.me/ss_iraq1";
 
-const facebook="https://www.facebook.com/share/1FC5hwZSbt/";
-
-
-
-document.querySelectorAll(".whatsapp")
-.forEach(btn=>{
-btn.href="https://wa.me/"+whatsapp;
-});
+    const facebook="https://www.facebook.com/share/1FC5hwZSbt/";
 
 
 
-document.querySelectorAll(".telegram")
-.forEach(btn=>{
-btn.href=telegram;
-});
+    document.querySelectorAll(".whatsapp")
+    .forEach(btn=>{
+
+        btn.href="https://wa.me/"+whatsapp;
+
+        btn.target="_blank";
+
+    });
 
 
 
-document.querySelectorAll(".facebook")
-.forEach(btn=>{
-btn.href=facebook;
-});
+    document.querySelectorAll(".telegram")
+    .forEach(btn=>{
 
+        btn.href=telegram;
+
+        btn.target="_blank";
+
+    });
+
+
+
+    document.querySelectorAll(".facebook")
+    .forEach(btn=>{
+
+        btn.href=facebook;
+
+        btn.target="_blank";
+
+    });
 
 }
-
 
 
 
@@ -162,15 +173,14 @@ document.addEventListener(
 "DOMContentLoaded",
 ()=>{
 
-setupContact();
+    setupContact();
 
-}
-);
+});
 
 
 
 
 
 export {
-loadProducts
+    loadProducts
 };
