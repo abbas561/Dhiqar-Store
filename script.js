@@ -1,54 +1,65 @@
 // =====================================
 // أمازون ذي قار
-// Final Script v3
-// Live Search + Products System
+// Firebase Products Script
 // =====================================
 
 
-
-// =============================
-// جلب المنتجات
-// =============================
-
-
-function getProducts(){
-
-
-let saved =
-localStorage.getItem("products");
+import {
+    db,
+    collection,
+    getDocs
+} from "./firebase.js";
 
 
 
-if(saved){
+// جلب المنتجات من Firebase
 
-return JSON.parse(saved);
+async function getProducts(){
+
+    let products = [];
+
+    try{
+
+        const snapshot =
+        await getDocs(
+            collection(db,"products")
+        );
+
+
+        snapshot.forEach(doc=>{
+
+            products.push({
+
+                id:doc.id,
+                ...doc.data()
+
+            });
+
+        });
+
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
+
+    return products;
 
 }
 
 
 
-return products || [];
 
 
-}
-
-
-
-
-
-
-
-// =============================
 // عرض المنتجات
-// =============================
 
-
-function loadProducts(containerId, category = null){
+async function loadProducts(containerId, category=null){
 
 
 const container =
 document.getElementById(containerId);
-
 
 
 if(!container) return;
@@ -56,24 +67,18 @@ if(!container) return;
 
 
 let items =
-getProducts();
-
+await getProducts();
 
 
 
 if(category){
 
-
 items =
 items.filter(p=>
-
 p.category === category
-
 );
 
-
 }
-
 
 
 
@@ -81,44 +86,34 @@ container.innerHTML="";
 
 
 
-
 items.forEach(product=>{
 
 
-
 let img =
-
-product.images && product.images.length
-
+product.images &&
+product.images.length
 ?
-
 product.images[0]
-
 :
-
 product.image;
 
 
 
-
-container.innerHTML += `
-
+container.innerHTML += 
 
 <div class="product-card">
 
-
-<img src="${img}">
+<img src="${img || ''}">
 
 
 <h3>
-${product.name}
+${product.name || ''}
 </h3>
 
 
 <p>
-${product.price}
+${product.price || ''}
 </p>
-
 
 
 <a href="product.html?id=${product.id}">
@@ -126,16 +121,11 @@ ${product.price}
 </a>
 
 
-
 </div>
 
-
-`;
-
-
+;
 
 });
-
 
 
 }
@@ -146,26 +136,18 @@ ${product.price}
 
 
 
+// البحث
 
-// =============================
-// البحث المباشر
-// =============================
-
-
-function setupLiveSearch(){
-
+async function setupLiveSearch(){
 
 
 let input =
 document.getElementById("searchInput");
 
 
-
 if(!input) return;
 
 
-
-// إنشاء صندوق النتائج
 
 let box =
 document.createElement("div");
@@ -174,37 +156,11 @@ document.createElement("div");
 box.id="search-results";
 
 
-box.style.position="absolute";
-
-box.style.background="white";
-
-box.style.zIndex="999";
-
-box.style.width="300px";
-
-box.style.boxShadow="0 5px 15px #ccc";
-
-box.style.borderRadius="10px";
-
-box.style.overflow="hidden";
-
-
-
-
-input.parentElement.style.position="relative";
-
-
 input.parentElement.appendChild(box);
 
 
 
-
-
-
-input.addEventListener(
-"input",
-function(){
-
+input.addEventListener("input",async function(){
 
 
 let value =
@@ -217,7 +173,6 @@ this.value
 box.innerHTML="";
 
 
-
 if(!value){
 
 box.style.display="none";
@@ -228,251 +183,71 @@ return;
 
 
 
+let products =
+await getProducts();
 
 
 
 let results =
+products
+.filter(p=>
 
-getProducts()
-
-.filter(product=>
-
-
-product.name
+p.name
 .toLowerCase()
 .includes(value)
 
 )
-
 .slice(0,6);
-
-
-
 
 
 
 results.forEach(product=>{
 
 
+box.innerHTML += 
 
-let img =
+<div onclick="location.href='product.html?id=${product.id}'">
 
-product.images &&
-product.images.length
-
-?
-
-product.images[0]
-
-:
-
-product.image;
-
-
-
-
-
-box.innerHTML += `
-
-
-<div style="
-display:flex;
-align-items:center;
-gap:10px;
-padding:10px;
-cursor:pointer;
-border-bottom:1px solid #ddd;
-"
-onclick="window.location='product.html?id=${product.id}'">
-
-
-<img src="${img}"
-width="50"
-height="50"
-style="object-fit:cover;border-radius:5px;">
-
-
-<div>
-
-
-<b>
 ${product.name}
-</b>
-
-
-<br>
-
-
-<span>
-${product.price}
-</span>
-
 
 </div>
 
-
-
-</div>
-
-
-
-`;
-
-
+;
 
 });
 
 
 
+box.style.display =
+results.length
+?
+"block"
+:
+"none";
 
 
-if(results.length){
-
-
-box.style.display="block";
-
-
-}
-
-else{
-
-
-box.style.display="none";
-
+});
 
 }
 
 
 
-});
-
-
-
-
-
-document.addEventListener(
-"click",
-function(e){
-
-
-if(!box.contains(e.target)
-&&
-e.target!==input){
-
-
-box.style.display="none";
-
-
-}
-
-
-
-});
-
-
-
-}
-
-
-
-
-
-
-
-
-// =============================
-// التواصل
-// =============================
-
-
-const WHATSAPP =
-"9647822980189";
-
-
-const TELEGRAM =
-"https://t.me/ss_iraq1";
-
-
-const FACEBOOK =
-"https://www.facebook.com/share/1FC5hwZSbt/";
-
-
-
-
-
-function setupContact(){
-
-
-
-document
-.querySelectorAll(".whatsapp")
-.forEach(btn=>{
-
-
-btn.href =
-"https://wa.me/"+WHATSAPP;
-
-
-btn.target="_blank";
-
-
-});
-
-
-
-
-document
-.querySelectorAll(".telegram")
-.forEach(btn=>{
-
-
-btn.href=TELEGRAM;
-
-btn.target="_blank";
-
-
-});
-
-
-
-
-document
-.querySelectorAll(".facebook")
-.forEach(btn=>{
-
-
-btn.href=FACEBOOK;
-
-btn.target="_blank";
-
-
-});
-
-
-
-}
-
-
-
-
-
-
-
-// =============================
-// تشغيل
-// =============================
 
 
 document.addEventListener(
 "DOMContentLoaded",
-function(){
+()=>{
 
 
 setupLiveSearch();
 
 
-setupContact();
+}
+);
 
 
 
-});
+// إتاحة الدالة للصفحات
+
+window.loadProducts =
+loadProducts;
