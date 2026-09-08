@@ -892,3 +892,18 @@ nav a {
     pointer-events: auto;
     cursor: pointer;
 }
+
+.float-contact{
+    z-index: 1;
+}
+
+nav{
+    position: relative;
+    z-index: 99999;
+}
+
+nav a{
+    position: relative;
+    z-index: 99999;
+    pointer-events: auto;
+}
