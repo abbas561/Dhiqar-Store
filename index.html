@@ -11,7 +11,6 @@
 أمازون ذي قار | السوق الإلكتروني
 </title>
 
-
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -20,19 +19,16 @@
 <body>
 
 
-
 <header>
-
 
 <div class="logo">
 🛒 أمازون ذي قار
 </div>
 
 
-
 <div class="search">
 
-<input id="searchInput" 
+<input id="searchInput"
 type="text"
 placeholder="ابحث عن منتج...">
 
@@ -48,11 +44,7 @@ placeholder="ابحث عن منتج...">
 
 
 
-
-
-
 <nav>
-
 
 <a href="index.html">
 🏠 الرئيسية
@@ -75,8 +67,6 @@ placeholder="ابحث عن منتج...">
 
 
 </nav>
-
-
 
 
 
@@ -116,9 +106,6 @@ placeholder="ابحث عن منتج...">
 
 
 
-
-
-
 <section class="categories">
 
 
@@ -128,127 +115,62 @@ placeholder="ابحث عن منتج...">
 
 
 
-<div class="category-box">
+<div id="main-categories"
+class="categories">
 
-<a href="electronics.html">
-
-💻 الإلكترونيات
-
-</a>
 
 </div>
-
-
-
-
-<div class="category-box">
-
-<a href="network.html">
-
-🌐 راوترات وشبكات
-
-</a>
-
-</div>
-
-
-
-
-
-<div class="category-box">
-
-<a href="gaming.html">
-
-🎮 ألعاب وجيمينج
-
-</a>
-
-</div>
-
-
-
-
-
-<div class="category-box">
-
-<a href="arduino.html">
-
-🤖 Arduino و Raspberry Pi
-
-</a>
-
-</div>
-
-
-
-
-
-<div class="category-box">
-
-<a href="plc.html">
-
-🏭 PLC وأتمتة صناعية
-
-</a>
-
-</div>
-
-
-
-
-
-<div class="category-box">
-
-<a href="cars.html">
-
-🚗 سيارات وقطع غيار
-
-</a>
-
-</div>
-
-
-
-
-
-<div class="category-box">
-
-<a href="bikes.html">
-
-🏍 دراجات وقطع غيار
-
-</a>
-
-</div>
-
-
-
-
-
-<div class="category-box">
-
-<a href="tools.html">
-
-🛠 أدوات ومعدات
-
-</a>
-
-</div>
-
 
 
 </section>
 
+<script type="module">
+
+
+import categories from "./categories.js";
+
+
+const categoryBox =
+document.getElementById("main-categories");
+
+
+
+Object.keys(categories).forEach(category=>{
+
+
+categoryBox.innerHTML += `
+
+<div class="category-card">
+
+
+<a href="products.html?category=${encodeURIComponent(category)}">
+
+
+📦
+
+${category}
+
+
+</a>
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+
+</script>
 
 
 
 
 
-
-
-
-
-<section class="products">
+<section class="latest">
 
 
 <h2>
@@ -256,10 +178,13 @@ placeholder="ابحث عن منتج...">
 </h2>
 
 
+
 <div id="latest-products"
 class="products">
 
+
 </div>
+
 
 
 </section>
@@ -268,34 +193,21 @@ class="products">
 
 
 
+<section class="all-products">
 
 
+<a href="products.html">
 
+<button>
 
+🛒 جميع المنتجات
 
-<div class="float-contact">
+</button>
 
-
-<a class="whatsapp">
-💬
 </a>
 
 
-<a class="telegram">
-✈️
-</a>
-
-
-<a class="facebook">
-f
-</a>
-
-
-</div>
-
-
-
-
+</section>
 
 
 
@@ -304,19 +216,50 @@ f
 <footer>
 
 
+<div>
+
 <h3>
 أمازون ذي قار
 </h3>
 
 
 <p>
-سوقك الإلكتروني الشامل
+السوق الإلكتروني الشامل
 </p>
 
 
-<p>
-© 2026
-</p>
+</div>
+
+
+
+<div>
+
+
+<a class="whatsapp">
+
+واتساب
+
+</a>
+
+
+
+<a class="telegram">
+
+تلغرام
+
+</a>
+
+
+
+<a class="facebook">
+
+فيسبوك
+
+</a>
+
+
+
+</div>
 
 
 </footer>
@@ -325,18 +268,21 @@ f
 
 
 
-
-
 <script type="module">
 
-import { loadProducts } from "./script.js";
 
-loadProducts("latest-products");
+import { loadProducts }
+from "./script.js";
+
+
+
+loadProducts(
+"latest-products"
+);
+
+
 
 </script>
-
-
-
 </body>
 
 </html>
