@@ -523,13 +523,14 @@ padding:30px;
 
 
 
-.product-image img {
-    width: 100%;
+#productImage {
     max-width: 450px;
-    height: 450px;
+    max-height: 450px;
+    width: auto;
+    height: auto;
     object-fit: contain;
     display: block;
-    margin: auto;
+    margin: 20px auto;
 }
 
 
