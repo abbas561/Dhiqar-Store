@@ -26,9 +26,10 @@
 </div>
 
 
+
 <div class="search">
 
-<input id="searchInput"
+<input id="searchInput" 
 type="text"
 placeholder="ابحث عن منتج...">
 
@@ -37,6 +38,7 @@ placeholder="ابحث عن منتج...">
 بحث
 </button>
 
+
 </div>
 
 
@@ -44,7 +46,10 @@ placeholder="ابحث عن منتج...">
 
 
 
+
+
 <nav>
+
 
 <a href="index.html">
 🏠 الرئيسية
@@ -100,77 +105,10 @@ placeholder="ابحث عن منتج...">
 </a>
 
 
-</section>
-
-
-
-
-
-<section class="categories">
-
-
-<h2>
-📂 الأقسام الرئيسية
-</h2>
-
-
-
-<div id="main-categories"
-class="categories">
-
-
-</div>
-
 
 </section>
 
-<script type="module">
-
-
-import categories from "./categories.js";
-
-
-const categoryBox =
-document.getElementById("main-categories");
-
-
-
-Object.keys(categories).forEach(category=>{
-
-
-categoryBox.innerHTML += `
-
-<div class="category-card">
-
-
-<a href="products.html?category=${encodeURIComponent(category)}">
-
-
-📦
-
-${category}
-
-
-</a>
-
-
-</div>
-
-
-`;
-
-
-});
-
-
-
-</script>
-
-
-
-
-
-<section class="latest">
+<section class="products">
 
 
 <h2>
@@ -198,11 +136,13 @@ class="products">
 
 <a href="products.html">
 
+
 <button>
 
 🛒 جميع المنتجات
 
 </button>
+
 
 </a>
 
@@ -213,10 +153,35 @@ class="products">
 
 
 
+<div class="float-contact">
+
+
+<a class="whatsapp">
+💬
+</a>
+
+
+
+<a class="telegram">
+✈️
+</a>
+
+
+
+<a class="facebook">
+f
+</a>
+
+
+
+</div>
+
+
+
+
+
 <footer>
 
-
-<div>
 
 <h3>
 أمازون ذي قار
@@ -224,56 +189,20 @@ class="products">
 
 
 <p>
-السوق الإلكتروني الشامل
+سوقك الإلكتروني الشامل
 </p>
 
 
-</div>
-
-
-
-<div>
-
-
-<a class="whatsapp">
-
-واتساب
-
-</a>
-
-
-
-<a class="telegram">
-
-تلغرام
-
-</a>
-
-
-
-<a class="facebook">
-
-فيسبوك
-
-</a>
-
-
-
-</div>
+<p>
+© 2026
+</p>
 
 
 </footer>
 
-
-
-
-
 <script type="module">
 
-
-import { loadProducts }
-from "./script.js";
-
+import { loadProducts } from "./script.js";
 
 
 loadProducts(
@@ -281,8 +210,10 @@ loadProducts(
 );
 
 
-
 </script>
+
+
+
 </body>
 
 </html>
