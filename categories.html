@@ -7,21 +7,17 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
 <title>
-أقسام المتجر | أمازون ذي قار
+أقسام المنتجات - أمازون ذي قار
 </title>
 
 
 <link rel="stylesheet" href="style.css">
 
-
 </head>
 
 
 <body>
-
-
 
 
 <header>
@@ -30,30 +26,11 @@
 🛒 أمازون ذي قار
 </div>
 
-
-<div class="search">
-
-<input id="searchInput"
-placeholder="ابحث عن منتج...">
-
-
-<button>
-🔍 بحث
-</button>
-
-
-</div>
-
-
 </header>
 
 
 
-
-
-
 <nav>
-
 
 <a href="index.html">
 🏠 الرئيسية
@@ -70,58 +47,56 @@ placeholder="ابحث عن منتج...">
 </a>
 
 
-<a href="contact.html">
-📞 تواصل معنا
-</a>
-
-
 </nav>
 
 
 
 
-
-
-
-
-<section class="hero">
-
-
-<h1>
-📂 أقسام المتجر
-</h1>
-
-
-<p>
-تصفح الأقسام والمنتجات
-</p>
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="categories">
+<section class="categories-page">
 
 
 <h2>
-الأقسام الرئيسية
+📂 الأقسام الرئيسية
 </h2>
 
 
-
-<div id="categories-container"
+<div id="categories-box"
 class="categories">
 
 </div>
 
 
 
+<h2 id="sub-title"
+style="display:none">
+
+الفروع
+
+</h2>
+
+
+<div id="subcategories-box"
+class="categories">
+
+</div>
+
+
+
+<h2 id="products-title"
+style="display:none">
+
+المنتجات
+
+</h2>
+
+
+<div id="category-products"
+class="products">
+
+</div>
+
+
+
 </section>
 
 
@@ -129,117 +104,63 @@ class="categories">
 
 
 
+<script type="module">
 
 
+import categories from "./categories.js";
 
-<div class="float-contact">
 
+import { loadProducts }
+from "./script.js";
 
-<a class="whatsapp">
-💬
-</a>
 
 
-<a class="telegram">
-✈️
-</a>
 
 
-<a class="facebook">
-f
-</a>
+const categoriesBox =
+document.getElementById("categories-box");
 
 
-</div>
+const subBox =
+document.getElementById("subcategories-box");
 
 
 
+const subTitle =
+document.getElementById("sub-title");
 
 
+const productsTitle =
+document.getElementById("products-title");
 
 
 
-<footer>
+const productsBox =
+document.getElementById("category-products");
 
 
-<h3>
-أمازون ذي قار
-</h3>
 
 
-<p>
-السوق الإلكتروني الشامل
-</p>
 
 
-</footer>
 
+Object.keys(categories).forEach(cat=>{
 
 
+categoriesBox.innerHTML += `
 
 
+<button class="category-btn"
+data-category="${cat}">
 
 
+📦 ${cat}
 
 
-<script src="products-data.js"></script>
+</button>
 
-<script src="script.js"></script>
 
-
-
-<script>
-
-
-
-function loadCategories(){
-
-
-
-let productsList =
-getProducts();
-
-
-
-
-let categories = {};
-
-
-
-
-
-productsList.forEach(product=>{
-
-
-
-if(!categories[product.category]){
-
-
-categories[product.category]=[];
-
-
-}
-
-
-
-
-if(product.subcategory){
-
-
-if(
-!categories[product.category]
-.includes(product.subcategory)
-){
-
-
-categories[product.category]
-.push(product.subcategory);
-
-
-}
-
-
-}
+`;
 
 
 
@@ -251,106 +172,50 @@ categories[product.category]
 
 
 
-let box =
-document.getElementById(
-"categories-container"
-);
+document.querySelectorAll(".category-btn")
+.forEach(btn=>{
+
+
+btn.onclick=function(){
+
+
+
+let cat =
+this.dataset.category;
+
+
+
+subBox.innerHTML="";
+
+
+productsBox.innerHTML="";
+
+
+
+subTitle.style.display="block";
+
+
+productsTitle.style.display="none";
 
 
 
 
-
-box.innerHTML="";
-
+categories[cat].forEach(sub=>{
 
 
 
+subBox.innerHTML += `
 
 
-Object.keys(categories)
-.forEach(category=>{
+<button class="subcategory-btn"
+data-sub="${sub}"
+data-cat="${cat}">
 
 
-
-
-
-let subs =
-categories[category];
-
-
-
-
-
-
-box.innerHTML += `
-
-
-
-<div class="category-box">
-
-
-<h3>
-
-${category}
-
-</h3>
-
-
-
-
-
-${
-subs.length ?
-
-`
-
-<ul>
-
-${
-
-subs.map(sub=>
-
-`
-
-<li>
 ${sub}
-</li>
-
-`
-
-).join("")
-
-}
-
-</ul>
-
-`
-
-:
-
-`
-
-<p>
-جميع المنتجات
-</p>
-
-`
-
-}
 
 
-
-
-
-<a href="products.html">
-
-عرض المنتجات
-
-</a>
-
-
-
-</div>
+</button>
 
 
 
@@ -358,6 +223,47 @@ ${sub}
 
 
 
+});
+
+
+
+
+document.querySelectorAll(".subcategory-btn")
+.forEach(subBtn=>{
+
+
+subBtn.onclick=function(){
+
+
+let sub =
+this.dataset.sub;
+
+
+
+productsTitle.style.display="block";
+
+
+productsBox.innerHTML="";
+
+
+
+loadProducts(
+"category-products",
+sub
+);
+
+
+
+};
+
+
+
+});
+
+
+
+};
+
 
 
 });
@@ -366,21 +272,7 @@ ${sub}
 
 
 
-}
-
-
-
-
-
-
-
-loadCategories();
-
-
-
 </script>
-
-
 
 
 
