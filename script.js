@@ -335,15 +335,6 @@ setupLiveSearch();
 
 
 
-
-export {
-
-loadProducts
-
-};
-// نهاية الملف
-
-
 // هذا التصدير يسمح للصفحات باستخدام عرض المنتجات
 
 export {
