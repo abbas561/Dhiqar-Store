@@ -874,6 +874,18 @@ grid-template-columns:1fr;
 
 }
 
+.product-details img,
+.product-info img,
+#productImage {
+    max-width: 500px !important;
+    max-height: 400px !important;
+    width: 100% !important;
+    height: 400px !important;
+    object-fit: contain !important;
+    display: block;
+    margin: 20px auto;
+}
+
 nav a {
     position: relative;
     z-index: 9999;
