@@ -3,40 +3,60 @@
 // Firebase Products System
 // =====================================
 
+
 import { db } from "./firebase.js";
 
+
 import {
-    collection,
-    getDocs
+
+collection,
+
+getDocs
+
 }
+
 from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+
 
 
 // جلب المنتجات من Firebase
 
+
 async function getProducts(){
 
-    let items = [];
 
-    let snapshot = await getDocs(
-        collection(db,"products")
-    );
+let items = [];
 
 
-    snapshot.forEach(doc=>{
 
-        items.push({
+let snapshot = await getDocs(
 
-            id: doc.id,
+collection(db,"products")
 
-            ...doc.data()
-
-        });
-
-    });
+);
 
 
-    return items;
+
+snapshot.forEach(doc=>{
+
+
+items.push({
+
+id: doc.id,
+
+...doc.data()
+
+});
+
+
+});
+
+
+
+return items;
+
 
 }
 
@@ -46,125 +66,254 @@ async function getProducts(){
 
 // عرض المنتجات
 
-async function loadProducts(containerId, category=null){
+async function loadProducts(containerId, category=null, subcategory=null){
 
 
-    let box =
-    document.getElementById(containerId);
-
-
-    if(!box) return;
+let box =
+document.getElementById(containerId);
 
 
 
-    let products =
-    await getProducts();
+if(!box) return;
 
 
 
-    if(category){
-
-        products =
-        products.filter(p=>
-            p.category === category
-        );
-
-    }
+let products =
+await getProducts();
 
 
 
-    box.innerHTML = "";
+
+
+if(category){
+
+
+products =
+products.filter(p =>
+
+p.category === category
+
+);
+
+
+}
 
 
 
-    products.forEach(product=>{
+
+if(subcategory){
 
 
-        let img =
-        product.images &&
-        product.images.length
+products =
+products.filter(p =>
 
-        ?
+p.subcategory === subcategory
 
-        product.images[0]
+);
 
-        :
 
-        product.image || "";
+}
 
 
 
-        box.innerHTML += `
-
-        <div class="product-card">
-
-            <img src="${img}">
-
-            <h3>
-            ${product.name}
-            </h3>
-
-            <p>
-            ${product.price}
-            </p>
-
-            <a href="product.html?id=${product.id}">
-            عرض المنتج
-            </a>
-
-        </div>
-
-        `;
+box.innerHTML = "";
 
 
-    });
+
+products.forEach(product=>{
+
+
+let img =
+
+product.images && product.images.length
+
+?
+
+product.images[0]
+
+:
+
+product.image || "";
+
+
+
+box.innerHTML += `
+
+
+<div class="product-card">
+
+
+<img src="${img}">
+
+
+<h3>
+${product.name}
+</h3>
+
+
+<p>
+${product.price}
+</p>
+
+
+
+<a href="product.html?id=${product.id}">
+عرض المنتج
+</a>
+
+
+
+</div>
+
+
+`;
+
+
+
+});
 
 
 }
 // التواصل
 
+
 function setupContact(){
 
-    const whatsapp="9647822980189";
 
-    const telegram="https://t.me/ss_iraq1";
-
-    const facebook="https://www.facebook.com/share/1FC5hwZSbt/";
+const whatsapp =
+"9647822980189";
 
 
+const telegram =
+"https://t.me/ss_iraq1";
 
-    document.querySelectorAll(".whatsapp")
-    .forEach(btn=>{
 
-        btn.href="https://wa.me/"+whatsapp;
-
-        btn.target="_blank";
-
-    });
+const facebook =
+"https://www.facebook.com/share/1FC5hwZSbt/";
 
 
 
-    document.querySelectorAll(".telegram")
-    .forEach(btn=>{
-
-        btn.href=telegram;
-
-        btn.target="_blank";
-
-    });
 
 
+document
+.querySelectorAll(".whatsapp")
+.forEach(btn=>{
 
-    document.querySelectorAll(".facebook")
-    .forEach(btn=>{
 
-        btn.href=facebook;
+btn.href =
+"https://wa.me/"+whatsapp;
 
-        btn.target="_blank";
 
-    });
+btn.target="_blank";
+
+
+});
+
+
+
+
+
+document
+.querySelectorAll(".telegram")
+.forEach(btn=>{
+
+
+btn.href =
+telegram;
+
+
+btn.target="_blank";
+
+
+});
+
+
+
+
+
+document
+.querySelectorAll(".facebook")
+.forEach(btn=>{
+
+
+btn.href =
+facebook;
+
+
+btn.target="_blank";
+
+
+});
+
+
 
 }
+
+
+
+
+
+
+
+// البحث المباشر
+
+
+function setupLiveSearch(){
+
+
+
+let input =
+document.getElementById("searchInput");
+
+
+
+if(!input) return;
+
+
+
+input.addEventListener(
+"input",
+async function(){
+
+
+
+let value =
+this.value
+.toLowerCase()
+.trim();
+
+
+
+let products =
+await getProducts();
+
+
+
+
+let results =
+products.filter(p=>
+
+p.name
+.toLowerCase()
+.includes(value)
+
+);
+
+
+
+
+console.log(results);
+
+
+
+});
+
+
+
+}
+
+
+
 
 
 
@@ -173,7 +322,13 @@ document.addEventListener(
 "DOMContentLoaded",
 ()=>{
 
-    setupContact();
+
+setupContact();
+
+
+setupLiveSearch();
+
+
 
 });
 
@@ -182,5 +337,17 @@ document.addEventListener(
 
 
 export {
-    loadProducts
+
+loadProducts
+
+};
+// نهاية الملف
+
+
+// هذا التصدير يسمح للصفحات باستخدام عرض المنتجات
+
+export {
+
+loadProducts
+
 };
