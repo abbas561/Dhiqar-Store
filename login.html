@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+دخول الإدارة - أمازون ذي قار
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<section class="category-box">
+
+
+<h2>
+🔐 دخول لوحة الإدارة
+</h2>
+
+
+
+<input id="email"
+type="email"
+placeholder="البريد الإلكتروني">
+
+
+
+<br><br>
+
+
+
+<input id="password"
+type="password"
+placeholder="كلمة المرور">
+
+
+
+<br><br>
+
+
+
+<button onclick="login()">
+
+دخول
+
+</button>
+
+
+
+<p id="message"></p>
+
+
+</section>
+
+
+
+
+
+
+
+<script type="module">
+
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+
+import {
+
+getAuth,
+
+signInWithEmailAndPassword
+
+}
+
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+
+
+
+
+const firebaseConfig = {
+
+
+apiKey: "AIzaSyB6X2980189",
+
+authDomain: "dhiqar-store.firebaseapp.com",
+
+projectId: "dhiqar-store",
+
+
+};
+
+
+
+
+
+
+const app =
+initializeApp(firebaseConfig);
+
+
+
+const auth =
+getAuth(app);
+
+
+
+
+
+
+
+window.login = async function(){
+
+
+
+let email =
+document.getElementById("email").value;
+
+
+
+let password =
+document.getElementById("password").value;
+
+
+
+try{
+
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+
+
+window.location.href =
+"admin.html";
+
+
+
+}
+
+catch(error){
+
+
+document.getElementById("message").innerHTML =
+"بيانات الدخول غير صحيحة";
+
+
+}
+
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
