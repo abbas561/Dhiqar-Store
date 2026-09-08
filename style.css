@@ -871,6 +871,11 @@ grid-template-columns:1fr;
 
 }
 
-
+nav a {
+    position: relative;
+    z-index: 9999;
+    pointer-events: auto;
+    cursor: pointer;
+}
 
 }
