@@ -11,15 +11,12 @@
 تفاصيل المنتج - أمازون ذي قار
 </title>
 
-
 <link rel="stylesheet" href="style.css">
 
 </head>
 
 
-
 <body>
-
 
 
 <header>
@@ -28,14 +25,11 @@
 🛒 أمازون ذي قار
 </div>
 
-
 </header>
 
 
 
-
 <nav>
-
 
 <a href="index.html">
 🏠 الرئيسية
@@ -57,7 +51,6 @@
 </a>
 
 
-
 </nav>
 
 
@@ -65,7 +58,6 @@
 
 
 <section class="product-details" id="product">
-
 
 </section>
 
@@ -94,10 +86,8 @@ from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
 
-
 let box =
 document.getElementById("product");
-
 
 
 
@@ -127,6 +117,7 @@ box.innerHTML =
 return;
 
 }
+
 
 
 
@@ -175,9 +166,6 @@ product.image || "";
 
 
 
-
-
-
 box.innerHTML = `
 
 
@@ -207,20 +195,28 @@ ${product.description || ""}
 </p>
 
 
-
 <p>
 📂 القسم:
 ${product.category || ""}
 </p>
 
-<p>اللون: <span id="productColor"></span></p>
-<p>الكمية المتوفرة: <span id="productQuantity"></span></p>
+
+<p>
+🎨 اللون:
+${product.color || "غير محدد"}
+</p>
+
+
+<p>
+📦 الكمية المتوفرة:
+${product.quantity || "غير محدد"}
+</p>
+
 
 <p>
 📁 الفرع:
 ${product.subcategory || ""}
 </p>
-
 
 
 <a href="https://wa.me/9647822980189"
@@ -231,11 +227,7 @@ target="_blank">
 </button>
 
 </a>
-
-
-
 </div>
-
 
 `;
 
