@@ -398,6 +398,52 @@ let file = event.target.files[0];
 if(!file) return;
 
 let reader = new FileReader();
+
+reader.onload=function(e){
+
+let img = new Image();
+
+img.onload=function(){
+
+let canvas=document.createElement("canvas");
+
+let max=500;
+let scale=Math.min(max/img.width,max/img.height,1);
+
+canvas.width=img.width*scale;
+canvas.height=img.height*scale;
+
+let ctx=canvas.getContext("2d");
+ctx.drawImage(img,0,0,canvas.width,canvas.height);
+
+let imageData = canvas.toDataURL("image/jpeg",0.35);
+
+if(selectedImages.length >= 3){
+alert("الحد الأقصى 3 صور");
+return;
+}
+
+selectedImages.push(imageData);
+
+document.getElementById("preview").innerHTML =
+selectedImages.map(img =>
+`<img src="${img}" style="width:100px;margin:5px;border-radius:8px;">`
+).join("");
+
+};
+
+img.src=e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+let file = event.target.files[0];
+if(!file) return;
+
+let reader = new FileReader();
 reader.onload=function(e){
 let img=new Image();
 img.onload=function(){
