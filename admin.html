@@ -410,13 +410,12 @@ new FileReader();
 reader.onload=function(e){
 
 
-selectedImage=e.target.result;
+selectedImages.push(e.target.result);
 
-
-
-document.getElementById("preview").innerHTML=
-
-`<img src="${selectedImage}">`;
+document.getElementById("preview").innerHTML =
+selectedImages.map(img =>
+<img src="${img}" width="100">
+).join("");
 
 
 
