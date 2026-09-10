@@ -180,9 +180,17 @@ box.innerHTML = `
 
 ${images.map(image=>`
 
+<div class="main-image-box">
+<img id="mainImage" src="${mainImage}">
+</div>
+
+<div class="thumbs">
+${images.map(image=>`
 <img 
 src="${image}" 
-onclick="document.getElementById('mainImage').src='${image}'"
+onclick="document.getElementById('mainImage').src='${image}'">
+`).join("")}
+</div>
 style="width:80px;cursor:pointer;margin:5px;">
 
 `).join("")}
