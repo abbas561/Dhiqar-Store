@@ -158,11 +158,11 @@ snap.data();
 let images =
 product.images && product.images.length
 ?
-product.images
+product.images.filter(Boolean)
 :
-[product.image || ""];
+(product.image ? [product.image] : []);
 
-let mainImage = images[0];
+let mainImage = images[0] || "";
 
 
 
@@ -172,31 +172,18 @@ box.innerHTML = `
 
 <div class="product-card">
 
-
-<img id="mainImage" src="${mainImage}">
-
-
-<div class="thumbs">
-
-${images.map(image=>`
-
 <div class="main-image-box">
-<img id="mainImage" src="${mainImage}">
+<img id="mainImage" src="${mainImage}" alt="${product.name || 'صورة المنتج'}">
 </div>
 
 <div class="thumbs">
-${images.map(image=>`
-<img 
-src="${image}" 
-onclick="document.getElementById('mainImage').src='${image}'">
+${images.filter(Boolean).map(image=>`
+<img
+src="${image}"
+alt="${product.name || 'صورة المنتج'}"
+onclick="document.getElementById('mainImage').src=this.src">
 `).join("")}
 </div>
-style="width:80px;cursor:pointer;margin:5px;">
-
-`).join("")}
-
-</div>
-
 
 
 <h1>
