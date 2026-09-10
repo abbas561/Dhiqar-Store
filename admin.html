@@ -402,14 +402,24 @@ reader.onload=function(e){
 let img=new Image();
 img.onload=function(){
 let canvas=document.createElement("canvas");
-let max=700;
+let max=500;
 let scale=Math.min(max/img.width,max/img.height,1);
 canvas.width=img.width*scale;
 canvas.height=img.height*scale;
 let ctx=canvas.getContext("2d");
 ctx.drawImage(img,0,0,canvas.width,canvas.height);
-selectedImages.push(canvas.toDataURL("image/jpeg",0.55));
-document.getElementById("preview").innerHTML=selectedImages.map(x=>`<img src="${x}" width="100">`).join("");
+
+let compressed = canvas.toDataURL("image/jpeg",0.35);
+
+if(selectedImages.length >= 3){
+ alert("يمكن إضافة 3 صور فقط");
+ return;
+}
+
+selectedImages.push(compressed);
+
+document.getElementById("preview").innerHTML =
+selectedImages.map(x=>`<img src="${x}" width="100">`).join("");
 };
 img.src=e.target.result;
 };
@@ -689,7 +699,7 @@ document.getElementById("status").value=p.status||"متوفر";
 document.getElementById("description").value=p.description||"";
 
 
-selectedImage =
+selectedImages = [
 p.images && p.images.length
 ?
 p.images[0]
@@ -698,9 +708,9 @@ p.image || "";
 
 
 document.getElementById("preview").innerHTML =
-selectedImage
+selectedImages.length
 ?
-`<img src="${selectedImage}">`
+selectedImages.map(x=>`<img src="${x}" width="100">`).join("")
 :
 "";
 
@@ -758,7 +768,7 @@ e.value="";
 document.getElementById("preview").innerHTML="";
 
 
-selectedImage="";
+selectedImages=[];
 
 
 document.getElementById("productId").value="";
