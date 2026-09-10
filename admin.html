@@ -237,6 +237,14 @@ import {
 
 getFirestore,
 
+getStorage,
+
+ref,
+
+uploadString,
+
+getDownloadURL,
+
 collection,
 
 getDocs,
@@ -283,6 +291,8 @@ const app = initializeApp(firebaseConfig);
 
 
 const db = getFirestore(app);
+
+const storage = getStorage(app);
 
 
 const auth = getAuth(app);
@@ -465,6 +475,28 @@ showProducts();
 
 
 
+
+async function uploadImages(){
+
+let urls=[];
+
+for(let i=0;i<selectedImages.length;i++){
+
+let imageRef = ref(storage, "products/" + Date.now() + "_" + i + ".jpg");
+
+await uploadString(imageRef, selectedImages[i], "data_url");
+
+let url = await getDownloadURL(imageRef);
+
+urls.push(url);
+
+}
+
+return urls;
+
+}
+
+
 // حفظ المنتج
 
 async function saveProduct(){
@@ -490,12 +522,11 @@ subcategory:
 document.getElementById("subcategory").value,
 
 
-images:
-selectedImages,
+images: await uploadImages(),
 
 
 image:
-selectedImages[0] || "",
+"",
 
 
 price:
