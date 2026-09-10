@@ -173,7 +173,21 @@ box.innerHTML = `
 <div class="product-card">
 
 
-<img src="${img}">
+<img id="mainImage" src="${mainImage}">
+
+
+<div class="thumbs">
+
+${images.map(image=>`
+
+<img 
+src="${image}" 
+onclick="document.getElementById('mainImage').src='${image}'"
+style="width:80px;cursor:pointer;margin:5px;">
+
+`).join("")}
+
+</div>
 
 
 
