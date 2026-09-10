@@ -458,7 +458,7 @@ document.getElementById("subcategory").value,
 
 
 images:
-selectedImages,
+selectedImages.filter(Boolean),
 
 
 image:
@@ -559,7 +559,7 @@ box.innerHTML="";
 data
 
 .filter(p=>
-p.name.toLowerCase().includes(search)
+(p.name || "").toLowerCase().includes(search)
 )
 
 .forEach(p=>{
@@ -670,7 +670,7 @@ p.images && p.images.length
 ?
 p.images
 :
-[p.image || ""];
+(p.image ? [p.image] : []);
 
 
 document.getElementById("preview").innerHTML =
