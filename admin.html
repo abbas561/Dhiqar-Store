@@ -665,12 +665,12 @@ document.getElementById("status").value=p.status||"متوفر";
 document.getElementById("description").value=p.description||"";
 
 
-selectedImages = [
+selectedImages =
 p.images && p.images.length
 ?
-p.images[0]
+p.images
 :
-p.image || "";
+[p.image || ""];
 
 
 document.getElementById("preview").innerHTML =
