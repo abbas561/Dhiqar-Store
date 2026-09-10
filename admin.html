@@ -392,10 +392,52 @@ subcategorySelect.appendChild(option);
 
 window.previewImage=function(event){
 
+let file = event.target.files[0];
+if(!file) return;
 
+if(selectedImages.length >= 3){
+    alert("الحد الأقصى 3 صور");
+    event.target.value = "";
+    return;
+}
 
+let reader = new FileReader();
 
+reader.onload=function(e){
 
+    let img = new Image();
+
+    img.onload=function(){
+
+        let canvas = document.createElement("canvas");
+        let max = 500;
+        let scale = Math.min(max / img.width, max / img.height, 1);
+
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+
+        let ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        let imageData = canvas.toDataURL("image/jpeg", 0.35);
+
+        selectedImages.push(imageData);
+
+        document.getElementById("preview").innerHTML =
+        selectedImages
+        .filter(Boolean)
+        .map(x => `<img src="${x}" width="100" style="margin:5px;border-radius:8px;">`)
+        .join("");
+
+    };
+
+    img.src = e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+};
 
 // قراءة المنتجات من Firebase
 
@@ -458,7 +500,7 @@ document.getElementById("subcategory").value,
 
 
 images:
-selectedImages.filter(Boolean),
+selectedImages,
 
 
 image:
@@ -668,7 +710,7 @@ document.getElementById("description").value=p.description||"";
 selectedImages =
 p.images && p.images.length
 ?
-p.images
+p.images.filter(Boolean)
 :
 (p.image ? [p.image] : []);
 
@@ -738,6 +780,11 @@ selectedImages=[];
 
 
 document.getElementById("productId").value="";
+
+["imageFile1","imageFile2","imageFile3"].forEach(id=>{
+    let input=document.getElementById(id);
+    if(input) input.value="";
+});
 
 
 }
