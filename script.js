@@ -123,17 +123,12 @@ box.innerHTML = "";
 products.forEach(product=>{
 
 
-let img =
-
+let images = 
 product.images && product.images.length
-
 ?
-
-product.images[0]
-
+product.images
 :
-
-product.image || "";
+[product.image || ""];
 
 
 
