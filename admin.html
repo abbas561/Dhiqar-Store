@@ -237,14 +237,6 @@ import {
 
 getFirestore,
 
-getStorage,
-
-ref,
-
-uploadString,
-
-getDownloadURL,
-
 collection,
 
 getDocs,
@@ -291,8 +283,6 @@ const app = initializeApp(firebaseConfig);
 
 
 const db = getFirestore(app);
-
-const storage = getStorage(app);
 
 
 const auth = getAuth(app);
@@ -404,32 +394,26 @@ subcategorySelect.appendChild(option);
 
 window.previewImage=function(event){
 
+let file = event.target.files[0];
+if(!file) return;
 
-let file =
-event.target.files[0];
-
-
-if(!file)return;
-
-
-
-let reader =
-new FileReader();
-
-
-
+let reader = new FileReader();
 reader.onload=function(e){
-
-
-selectedImages.push(e.target.result);
-
-document.getElementById("preview").innerHTML =
-selectedImages.map(img =>
-`<img src="${img}" width="100">`
-).join("");
-
-
-
+let img=new Image();
+img.onload=function(){
+let canvas=document.createElement("canvas");
+let max=700;
+let scale=Math.min(max/img.width,max/img.height,1);
+canvas.width=img.width*scale;
+canvas.height=img.height*scale;
+let ctx=canvas.getContext("2d");
+ctx.drawImage(img,0,0,canvas.width,canvas.height);
+selectedImages.push(canvas.toDataURL("image/jpeg",0.55));
+document.getElementById("preview").innerHTML=selectedImages.map(x=>`<img src="${x}" width="100">`).join("");
+};
+img.src=e.target.result;
+};
+reader.readAsDataURL(file);
 };
 
 
@@ -475,28 +459,6 @@ showProducts();
 
 
 
-
-async function uploadImages(){
-
-let urls=[];
-
-for(let i=0;i<selectedImages.length;i++){
-
-let imageRef = ref(storage, "products/" + Date.now() + "_" + i + ".jpg");
-
-await uploadString(imageRef, selectedImages[i], "data_url");
-
-let url = await getDownloadURL(imageRef);
-
-urls.push(url);
-
-}
-
-return urls;
-
-}
-
-
 // حفظ المنتج
 
 async function saveProduct(){
@@ -522,11 +484,12 @@ subcategory:
 document.getElementById("subcategory").value,
 
 
-images: await uploadImages(),
+images:
+selectedImages,
 
 
 image:
-"",
+selectedImages[0] || "",
 
 
 price:
