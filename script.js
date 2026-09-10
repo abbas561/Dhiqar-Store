@@ -138,7 +138,11 @@ box.innerHTML += `
 <div class="product-card">
 
 
+<div class="product-images">
+${images.map(img=>`
 <img src="${img}">
+`).join("")}
+</div>
 
 
 <h3>
