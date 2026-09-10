@@ -155,13 +155,14 @@ snap.data();
 
 
 
-let img =
-product.images &&
-product.images.length
+let images =
+product.images && product.images.length
 ?
-product.images[0]
+product.images
 :
-product.image || "";
+[product.image || ""];
+
+let mainImage = images[0];
 
 
 
