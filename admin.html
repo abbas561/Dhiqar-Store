@@ -414,7 +414,7 @@ selectedImages.push(e.target.result);
 
 document.getElementById("preview").innerHTML =
 selectedImages.map(img =>
-<img src="${img}" width="100">
+`<img src="${img}" width="100">`
 ).join("");
 
 
